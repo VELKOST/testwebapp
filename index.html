@@ -46,30 +46,46 @@
         <h1>Демонстрация Telegram WebApp</h1>
         <button id="initButton">Инициализировать WebApp</button>
         <div class="info" id="userInfo"></div>
+        <div class="info" id="debugInfo"></div>
     </div>
 
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <script>
         document.getElementById('initButton').addEventListener('click', function() {
-            // Инициализация WebApp
             const tg = window.Telegram.WebApp;
-            tg.init();
 
-            // Работа с основной кнопкой
-            tg.MainButton.text = "Отправить данные";
-            tg.MainButton.onClick(function() {
-                tg.sendData("Данные, отправленные пользователем"); // Отправка данных боту
-            });
-            tg.MainButton.show();
+            // Проверка инициализации
+            try {
+                tg.init();
+                console.log("WebApp инициализирован");
+                document.getElementById('debugInfo').innerText = "WebApp инициализирован";
 
-            // Получение данных о пользователе
-            const userInfo = tg.initDataUnsafe.user;
-            document.getElementById('userInfo').innerHTML = `
-                <p><strong>Имя пользователя:</strong> ${userInfo.first_name}</p>
-                <p><strong>Фамилия пользователя:</strong> ${userInfo.last_name}</p>
-                <p><strong>Username:</strong> ${userInfo.username}</p>
-                <p><strong>ID пользователя:</strong> ${userInfo.id}</p>
-            `;
+                // Работа с основной кнопкой
+                tg.MainButton.text = "Отправить данные";
+                tg.MainButton.onClick(function() {
+                    console.log("Основная кнопка нажата");
+                    document.getElementById('debugInfo').innerText += "\nОсновная кнопка нажата";
+                    tg.sendData("Данные, отправленные пользователем");
+                });
+                tg.MainButton.show();
+                console.log("Основная кнопка показана");
+                document.getElementById('debugInfo').innerText += "\nОсновная кнопка показана";
+
+                // Получение данных о пользователе
+                const userInfo = tg.initDataUnsafe.user;
+                document.getElementById('userInfo').innerHTML = `
+                    <p><strong>Имя пользователя:</strong> ${userInfo.first_name}</p>
+                    <p><strong>Фамилия пользователя:</strong> ${userInfo.last_name}</p>
+                    <p><strong>Username:</strong> ${userInfo.username}</p>
+                    <p><strong>ID пользователя:</strong> ${userInfo.id}</p>
+                `;
+                console.log("Данные пользователя получены");
+                document.getElementById('debugInfo').innerText += "\nДанные пользователя получены";
+
+            } catch (error) {
+                console.error("Ошибка инициализации WebApp", error);
+                document.getElementById('debugInfo').innerText = "Ошибка инициализации WebApp: " + error.message;
+            }
         });
     </script>
 </body>
