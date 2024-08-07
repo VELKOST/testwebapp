@@ -44,7 +44,7 @@
 <body>
     <div class="container">
         <h1>Демонстрация Telegram WebApp</h1>
-        <button id="initButton">Инициализировать WebApp</button>
+        <button id="initButton">Показать информацию</button>
         <div class="info" id="userInfo"></div>
         <div class="info" id="debugInfo"></div>
     </div>
@@ -54,18 +54,18 @@
         document.getElementById('initButton').addEventListener('click', function() {
             const tg = window.Telegram.WebApp;
 
-            // Проверка инициализации
             try {
-                tg.init();
-                console.log("WebApp инициализирован");
-                document.getElementById('debugInfo').innerText = "WebApp инициализирован";
+                // Проверка наличия Telegram WebApp
+                if (!tg) {
+                    throw new Error("Telegram WebApp не найден");
+                }
 
                 // Работа с основной кнопкой
-                tg.MainButton.text = "Отправить данные";
+                tg.MainButton.setText("Отправить данные");
                 tg.MainButton.onClick(function() {
+                    tg.sendData("Данные, отправленные пользователем");
                     console.log("Основная кнопка нажата");
                     document.getElementById('debugInfo').innerText += "\nОсновная кнопка нажата";
-                    tg.sendData("Данные, отправленные пользователем");
                 });
                 tg.MainButton.show();
                 console.log("Основная кнопка показана");
